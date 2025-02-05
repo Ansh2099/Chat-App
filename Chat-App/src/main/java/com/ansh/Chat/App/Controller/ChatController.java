@@ -1,28 +1,27 @@
 package com.ansh.Chat.App.Controller;
 
 import com.ansh.Chat.App.Model.Message;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.messaging.simp.SimpMessageHeaderAccessor;
+import org.springframework.stereotype.Controller;
 
-@org.springframework.stereotype.Controller
-public class Controller {
+@Controller
+public class ChatController {
 
-    @MessageMapping("/chat.getMessage")
-            @SendTo("/topic/public")
-    public ResponseEntity<Message> sendMessage(@Payload Message message){
-        return new ResponseEntity(message, HttpStatus.OK);
+    @MessageMapping("/chat.sendMessage")
+    @SendTo("/topic/public")
+    public Message sendMessage(@Payload Message message){
+        return message;
     }
 
     @MessageMapping("/chat.addUser")
-            @SendTo("/topic/public")
-    public ResponseEntity<?> addusers(@Payload Message message,
+    @SendTo("/topic/public")
+    public Message addusers(@Payload Message message,
                                       SimpMessageHeaderAccessor header ){
 
         header.getSessionAttributes().put("username",message.getSender());
-        return new ResponseEntity(message, HttpStatus.OK);
+        return message;
     }
 }
